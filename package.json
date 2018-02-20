@@ -1,0 +1,20 @@
+{
+  "name": "playground_polymer",
+  "version": "1.0.0",
+  "description": "Polymer playground",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VictorDeAndres/Polymer_playground.git"
+  },
+  "author": "Victor de Andres",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VictorDeAndres/Polymer_playground/issues"
+  },
+  "homepage": "https://github.com/VictorDeAndres/Polymer_playground#readme"
+}

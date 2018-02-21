@@ -1,0 +1,73 @@
+<link rel="import" href="./../bower_components/iron-input/iron-input.html">
+<link rel="import" href="./../bower_components/paper-button/paper-button.html">
+
+<dom-module id="search-box">
+
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding: 0.5rem 0;
+        --paper-button-ripple-color: red;
+      }
+      .search-box-wrapper {
+        display: flex;
+      }
+      p {
+        color: var(--paper-button-ripple-color);
+      }
+      iron-input {
+        
+        flex-grow: 1;
+        margin-right: 0.5rem;
+        @apply --my-mixin;
+        padding-right: 2rem;
+        
+      }
+      input {
+        height: 90%;
+        font-size: 20px;
+        width: 100%;
+        padding-left: 2rem;
+      }
+      paper-button {
+        --paper-button-ink-color: var(--paper-button-ripple-color);
+      }
+    </style>
+    
+    <p>texto ejemplo</p>
+    <div class="search-box-wrapper">
+      <iron-input bind-value="{{value}}">
+        <input placeholder="[[placeholder]]" is="iron-input">
+      </iron-input>
+      <paper-button raised on-click="onSearchClicked">Buscar</paper-button>
+    </div>
+
+  </template>
+
+  <script>
+    class SearchBox extends Polymer.Element {
+      static get is() { return "search-box"; }
+      static get properties() {
+        return {
+          value: String,
+          placeholder: {
+            type: String,
+            value: 'Buscar...'
+          }
+        }
+      }
+
+      onSearchClicked() {
+        /* pragmatic error!!!! searchFilm is not a good event
+        name due to abstract logic from our component*/
+        this.dispatchEvent(new CustomEvent('searchFilm', 
+        { composed: true,
+          detail: { value: this.value }
+        }));
+      }
+    }
+    customElements.define(SearchBox.is, SearchBox);
+  </script>
+
+</dom-module>

@@ -1,0 +1,115 @@
+<link rel="import" href="search-box.html">
+<link rel="import" href="film-list.html">
+<link rel="import" href="./../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="./../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="film-search">
+
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding: 0 1rem;
+      }
+      paper-spinner {
+        margin: 1rem auto;
+        display: block;
+      }
+      search-box {
+        --my-mixin: {
+          font-size: 25px;
+          background-color: red;
+          margin-left: 3rem;
+        }
+      }
+      p {
+        color: red !important;
+      }
+    </style>
+
+    <p>Buscador de películas</p>
+    <search-box placeholder="Buscar película..."></search-box>
+    
+    <paper-spinner id="spinner"></paper-spinner>
+
+
+    <template is="dom-if" if="{{_areThereFilms(films)}}">
+      <film-list films="{{films}}"></film-list>
+    </template>
+    
+    <iron-ajax
+      url="http://www.omdbapi.com/"
+      params={{searchParams}}
+      handle-as="json"
+      on-response="_handleResponse"
+      debounce-duration="300">
+    </iron-ajax>
+
+    iron-ajax*
+    Mixins y CSS properties
+    
+
+  </template>
+
+  <script>
+    class FilmSearch extends Polymer.Element {
+
+      static get is() { return "film-search"; }
+      static get properties() {
+        return {
+          films: {
+            type: Array,
+            value: () => []
+          },
+          searching: {
+            type: Boolean,
+            value: false
+          },
+          searchParams: {
+            type: Object,
+            value: () => {
+              return {
+                s: '',
+                plot: 'full',
+                apikey: 'e477ed6a'
+              }
+            }
+          }
+          
+          
+        }
+      }
+
+      ready() {
+        super.ready();
+        this.addEventListener('searchFilm', this._searchFilm);
+      }
+
+      _searchFilm(event) {
+        console.log('please find this film!: ' + event.detail.value);
+        this._findFilms(event.detail.value);
+      }
+
+      _findFilms(film) {
+        this.set('searchParams.s', film);
+        this.shadowRoot.querySelector('iron-ajax').generateRequest();
+      }
+
+      _areThereFilms(films) {
+        // console.info('Number films', films.length);
+        return !!films.length;
+      }
+      
+      _togglePaperSpinner(status) {
+        this.shadowRoot.querySelector('#spinner').active = status;
+      }
+      
+      _handleResponse(event, request){
+        this.films = request.response.Response === 'True' ? request.response.Search : [];
+      }
+      
+    }
+    customElements.define(FilmSearch.is, FilmSearch);
+  </script>
+
+</dom-module>

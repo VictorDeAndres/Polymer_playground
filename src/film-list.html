@@ -1,0 +1,67 @@
+<dom-module id="film-list">
+
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .films-wrapper .film-item {
+        border: solid 1px lightgray;
+        padding: 1rem 2rem;
+        display: flex;
+      }
+      .films-wrapper .film-item + .film-item {
+        margin-top: 1rem;
+      }
+      .films-wrapper .film-item img {
+        height: 150px;
+      }
+      .films-wrapper .film-item .info-wrapper {
+        display: flex;
+        flex-direction: column;
+        padding: 0 1rem;
+      }
+      .films-wrapper .film-item .info-wrapper p {
+        margin: 0;
+      }
+    </style>
+
+    <div class="films-wrapper">
+      <template is="dom-repeat" items="{{films}}">
+        <div class="film-item">
+          <template is="dom-if" if="{{_showPoster(item.Poster)}}">
+            <img src="[[item.Poster]]" alt="">
+          </template>
+          <template is="dom-if" if="{{!_showPoster(item.Poster)}}">
+            <img src="./../img/no_poster.jpeg" alt="">
+          </template>
+          <div class="info-wrapper">
+            <p>[[item.Title]]</p>
+            <p>[[item.Year]]</p>
+          </div>
+        </div>
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+    class FilmList extends Polymer.Element {
+      static get is() { return "film-list"; }
+      static get properties() {
+        return {
+          films: {
+            type: Array,
+            value: () => []
+          }
+        }
+      }
+
+      _showPoster(_poster){
+        return _poster !== 'N/A'
+      }
+    }
+    customElements.define(FilmList.is, FilmList);
+  </script>
+
+</dom-module>

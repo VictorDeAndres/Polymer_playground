@@ -1,0 +1,42 @@
+<!-- Load the Polymer.Element base class -->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="test-event-child">
+  <!-- Defines the element's style and local DOM -->
+  <template>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+      :host {
+        display: block;
+
+        padding: 1em;
+        margin-bottom: 1em;
+
+        background-color: yellow;
+      }
+    </style>
+
+    <h4>
+      Child container
+    </h4>
+
+    <button on-click="_onClickEvent">Change Status at Parent</button>
+
+  </template>
+  <script>
+    // Your new element extends the Polymer.Element base class
+    class TestEventChild extends Polymer.Element {
+      static get is() { return 'test-event-child'; }
+      
+      ready() {
+        super.ready();
+      }
+
+      _onClickEvent(){
+        this.dispatchEvent(new CustomEvent('click', {detail: {kicked: true}}));
+      }
+    }
+    //Now, register your new custom element so the browser can use it
+    customElements.define(TestEventChild.is, TestEventChild);
+  </script>
+</dom-module>

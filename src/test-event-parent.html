@@ -1,0 +1,91 @@
+<!-- Load the Polymer.Element base class -->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="./test-event-child.html">
+
+<dom-module id="test-event-parent">
+  <!-- Defines the element's style and local DOM -->
+  <template>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+      :host {
+        display: block;
+
+        padding: 1em;
+
+        border: solid 1px rebeccapurple;
+      }
+
+      .icon{
+        font-size: 1.5em;
+        padding: 0.25em;
+      }
+
+    </style>
+
+    <h2>
+      <i class="fa fa-cubes" aria-hidden="true"></i>
+      <span>Test Event | Parent Container</span>
+    </h2>
+
+    <div>
+      <span>Current Status: </span>
+      <template is="dom-if" if="[[currentStatus]]">
+          <i class="icon fa fa-thumbs-o-up" aria-hidden="true"></i>
+      </template>
+      <template is="dom-if" if="[[!currentStatus]]">
+          <i class="icon fa fa-thumbs-o-down" aria-hidden="true"></i>
+      </template>    
+    </div>
+
+    <test-event-child></test-event-child>
+    
+    <button>
+      <span>Change status</span>
+    </button>
+
+  </template>
+  <script>
+    // Your new element extends the Polymer.Element base class
+    class TestEventParent extends Polymer.Element {
+
+      ready() {
+        this.addEventListener('click', this._onClick);
+        // this.addEventListener('mouseover', this._onMouseOver);
+        // this.addEventListener('mouseout', this._onMouseOut);
+        super.ready();
+        const TestEventChildComponent = this.shadowRoot.querySelector("test-event-child");  // select child element
+        TestEventChildComponent.addEventListener('click', this._onClick.bind(this));
+      }
+
+      static get is() { return 'test-event-parent'; }
+
+      static get properties() {
+        return {
+          currentStatus: {
+            type: Boolean,
+            value: false
+          }
+        }
+      }
+
+
+      _onClick(event) {
+        // console.info(`on Click from child ${event}`, event);
+        // console.info(`on Click from child ${this}`, this);
+        this.currentStatus = !this.currentStatus;
+      }
+
+      _onMouseOver(event){
+        console.info('on Mouse over event');
+      }
+
+      _onMouseOut(event){
+        console.info('on Mouse out event');
+      }
+
+    }
+    //Now, register your new custom element so the browser can use it
+    customElements.define(TestEventParent.is, TestEventParent);
+  </script>
+</dom-module>
